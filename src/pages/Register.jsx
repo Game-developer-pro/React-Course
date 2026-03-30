@@ -1,0 +1,146 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import z from 'zod';
+import { publicInstance } from '../api/api';
+
+export const Register = () => {
+    const [loading, setLoading] = useState(false);
+    const [disabled, setDisabled] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate()
+
+
+    const registerSchema = z.object({
+        name: z.string().nonempty(),
+        email: z.string().email().nonempty(),
+        password: z.string().nonempty().min(6, "password must be atleast 6 characters long")
+    })
+
+
+    const { register, handleSubmit, formState: { errors } } = useForm(
+        {
+            resolver: zodResolver(registerSchema)
+        }
+    )
+
+
+
+    const onSubmit = async (data) => {
+        console.log('creating user....');
+        setLoading(true);
+        setDisabled(true);
+        setErrorMessage("");
+
+        try {
+            const response = await publicInstance.post("/auth/register", data)
+            console.log(response.data);
+
+            if (response && response.data.token) {
+                localStorage.setItem('token', response.data.token)
+                navigate("/product")
+            }
+
+        } catch (error) {
+            console.log(error);
+            setErrorMessage(error.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
+            setDisabled(false);
+        }
+    }
+
+    const formStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: '400px',
+        margin: '20px auto',
+        padding: '20px',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+        gap: '10px',
+    };
+
+    const inputStyle = {
+        padding: '8px',
+        borderRadius: '4px',
+        border: '1px solid #ccc',
+        width: '100%',
+        boxSizing: 'border-box',
+    };
+
+    const buttonStyle = {
+        padding: '10px 15px',
+        backgroundColor: '#007bff',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+    };
+    return (
+        <div>
+            <form onSubmit={handleSubmit(onSubmit)} style={formStyle}>
+                <h2>Register</h2>
+
+                {errorMessage && <p style={{ color: "red", textAlign: "center" }}>{errorMessage}</p>}
+
+                 <div>
+                    <label htmlFor="name">Name:</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        style={inputStyle}
+                        {...register("name")}
+                        required
+                    />
+                </div>
+
+                {/* email Input (string) */}
+                <div>
+                    <label htmlFor="email">email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        style={inputStyle}
+                        {...register("email")}
+                        required
+                    />
+                    {errors.email && <p style={{ color: "red", fontSize: "10px" }}>{errors.email.message}</p>}
+                </div>
+
+
+
+               
+                <div>
+                    <label htmlFor="password">password</label>
+                    <input
+                        type="password" 
+                        id="password"
+                        name="password"
+                        {...register("password")}
+                        style={inputStyle}
+                        required
+                    />
+                    {errors.password && <p style={{ color: "red", fontSize: "10px" }}>{errors.password.message}</p>}
+
+                </div>
+
+
+                <button disabled={disabled} type="submit" style={buttonStyle}>
+                    {loading ? "loading" : "submit"}
+                </button>
+            </form>
+
+
+            {/* {
+                productRespobse && <ul>
+                    <li>{productRespobse.email}</li>
+                    <li>{productRespobse.description}</li>
+                </ul>
+            } */}
+        </div>
+    )
+}
