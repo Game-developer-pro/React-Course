@@ -1,7 +1,7 @@
 import axios from "axios";
 import { promise } from "zod";
 
-const baseURL = "https://node-course-2rz5.onrender.com";
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
 export const publicInstance = axios.create({ baseURL });
 
 export const privateInstance = axios.create({ baseURL });
