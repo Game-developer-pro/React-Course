@@ -1,7 +1,7 @@
 import axios from "axios";
-import { promise } from "zod";
 
-const baseURL =  import.meta.env.VITE_API_URL;
+const baseURL = import.meta.env.VITE_API_URL;
+
 export const publicInstance = axios.create({ baseURL });
 
 export const privateInstance = axios.create({ baseURL });
@@ -14,5 +14,5 @@ privateInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => promise.reject(error),
+  (error) => Promise.reject(error),
 );
