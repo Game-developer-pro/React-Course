@@ -12,7 +12,7 @@ export const Login = () => {
 
 
     const loginSchema = z.object({
-        email: z.email().nonempty(),
+        email: z.string().email().nonempty(),
         password: z.string().nonempty().min(6, "password must be atleast 6 characters long")
     })
 
