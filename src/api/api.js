@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_API_URL;
+const baseURL = import.meta.env.VITE_API_URL || "https://node-course-2rz5.onrender.com";
 
 export const publicInstance = axios.create({ baseURL });
 

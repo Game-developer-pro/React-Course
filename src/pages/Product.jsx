@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import productStyles from './Product.module.css';
 import { useNavigate } from 'react-router-dom';
 
+import { publicInstance } from '../api/api';
+
 
 export const Product = () => {
   const [product, setProduct] = useState(null);
@@ -15,20 +17,17 @@ export const Product = () => {
     setErrorMessage(null);
 
     try {
-      const res = await fetch("https://node-course-2rz5.onrender.com/product");
+      const response = await publicInstance.get("/product");
 
-      if (!res.ok) {
-        throw new Error("Server responded with an error");
-      }
-
-      const resJson = await res.json();
-
-      if (resJson && resJson.product) {
-        setProduct(resJson.product);
+      if (response.data && response.data.product) {
+        setProduct(response.data.product);
       } else {
         setProduct([]);
       }
     } catch (error) {
+      setProduct(null);
+      setErrorMessage("Failed to fetch product.");
+      console.error("Fetch error:", error);
       setProduct(null);
       setErrorMessage("Failed to fetch product.");
       console.error("Fetch error:", error);
