@@ -1,7 +1,7 @@
 import axios from "axios";
 import { promise } from "zod";
 
-const baseURL = "http://localhost:4001";
+const baseURL = "https://node-course-2rz5.onrender.com";
 export const publicInstance = axios.create({ baseURL });
 
 export const privateInstance = axios.create({ baseURL });

@@ -14,7 +14,7 @@ export const SingleProduct = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:4001/product/${id}`);
+      const res = await fetch(`https://node-course-2rz5.onrender.com/product/${id}`);
 
       if (!res.ok) {
         throw new Error("Could not find product.");

@@ -29,7 +29,7 @@ export const AddProduct = () => {
         setLoading(true);
         try {
             const formDataToSubmit = { ...formData, price: parseFloat(formData.price) || 0 };
-            const response = await fetch('/api/product', {
+            const response = await fetch('https://node-course-2rz5.onrender.com/product', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formDataToSubmit)

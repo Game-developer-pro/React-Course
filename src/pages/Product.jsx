@@ -12,11 +12,11 @@ export const Product = () => {
 
   const fetchProduct = useCallback(async () => {
     setIsLoading(true);
-    setErrorMessage(null); 
+    setErrorMessage(null);
 
     try {
-      const res = await fetch("/api/product");
-      
+      const res = await fetch("https://node-course-2rz5.onrender.com/product");
+
       if (!res.ok) {
         throw new Error("Server responded with an error");
       }
@@ -26,7 +26,7 @@ export const Product = () => {
       if (resJson && resJson.product) {
         setProduct(resJson.product);
       } else {
-        setProduct([]); 
+        setProduct([]);
       }
     } catch (error) {
       setProduct(null);
@@ -53,7 +53,7 @@ export const Product = () => {
 
       {/* Conditional Rendering for States */}
       {isLoading && <p>Loading products...</p>}
-      
+
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
       {!isLoading && product && product.length > 0 ? (
@@ -66,7 +66,7 @@ export const Product = () => {
               <h3 className={productStyles.title}>{item.title}</h3>
               <p className={productStyles.description}>{item.description}</p>
               <p className={productStyles.price}>${item.price}</p>
-              <button className={productStyles.showDetails} onClick={()=> navigate(`./SingleProduct/${item._id}`)}>Show details</button>
+              <button className={productStyles.showDetails} onClick={() => navigate(`./SingleProduct/${item._id}`)}>Show details</button>
 
             </div>
           ))}
