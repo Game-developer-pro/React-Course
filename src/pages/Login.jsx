@@ -1,14 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import z from 'zod';
 import { publicInstance } from '../api/api';
+import { userContext } from '../contex/userContext';
 
 export const Login = () => {
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const { logIn } = useContext(userContext);
 
 
     const loginSchema = z.object({
@@ -34,7 +36,7 @@ export const Login = () => {
             console.log(response.data);
 
             if (response) {
-                localStorage.setItem('token', response.data.token)
+                logIn({ token: response.data.token });
                 navigate("/product")
             }
 
