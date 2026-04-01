@@ -39,16 +39,16 @@ export const UserProvider = ({ children }) => {
         const savedToken = localStorage.getItem('token')
 
         try {
-            if (savedUser) {
-                const perSavedUser = JSON.parse(savedUser)
-                setUser(perSavedUser)
-            }
             if (savedToken) {
                 setToken(savedToken)
             }
+            if (savedUser && savedUser !== 'undefined' && savedUser !== 'null') {
+                const perSavedUser = JSON.parse(savedUser)
+                setUser(perSavedUser)
+            }
         } catch (error) {
-            console.log(error);
-
+            console.log("Error parsing user data from localStorage:", error);
+            localStorage.removeItem('user');
         }
 
         setLoading(false)
